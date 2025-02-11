@@ -1,1 +1,1 @@
-# RL-2025-Skoltech
+# RL-2025-Sk
