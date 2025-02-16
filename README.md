@@ -85,11 +85,17 @@ This script:
 - Initializes the PointEnv environment.
 - Takes random actions and renders the point's movement using pygame.
 
-Key code snippet from src/envs/custom_envs/point.py:
+Key code snippet from `src/envs/custom_envs/point.py`.
 
 
 ```bash
+from typing import Optional
+import gymnasium as gym
+
 class PointEnv(gym.Env):
+    x_start: float = 0.
+    screen_dim: int = 500
+
     def __init__(self, size: float = 10., render_mode: Optional[str] = None):
         self.size = size
         self.observation_space = gym.spaces.Box(-1., 1., shape=(1,))
