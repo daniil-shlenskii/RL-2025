@@ -17,6 +17,7 @@ This repository contains small reinforcement learning (RL) projects, including a
 The Q-learning agent is trained to navigate the `CliffWalking-v0` environment using a tabular Q-learning algorithm.
 
 ### 2. 1D Point Environment with Obstacles
+
 The `PointEnv` is a custom environment where a point moves in a 1D space with obstacles, rendered using `pygame`.
 ---
 
