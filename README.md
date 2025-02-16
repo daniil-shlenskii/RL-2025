@@ -19,6 +19,7 @@ The Q-learning agent is trained to navigate the `CliffWalking-v0` environment us
 ### 2. 1D Point Environment with Obstacles
 
 The `PointEnv` is a custom environment where a point moves in a 1D space with obstacles, rendered using `pygame`.
+
 ---
 
 ## Installation
@@ -44,7 +45,7 @@ pip install gymnasium numpy pygame
 
 ### Q-Learning Agent for CliffWalking-v0
 
-The Q-learning agent is implemented in src/agents/tabular/qlearning.py and trained/evaluated in run/1_tabular.py.
+The Q-learning agent is implemented in `src/agents/tabular/qlearning.py`  and trained/evaluated in  `run/1_tabular.py` .
 
 1. **Train and evaluate the agent:**
 ```bash
@@ -52,11 +53,11 @@ python run/1_tabular.py
 ```
 
 This script:
-- Initializes the CliffWalking-v0 environment.
+- Initializes the `CliffWalking-v0`  environment.
 - Trains the Q-learning agent.
 - Evaluates the agent and renders the environment.
 
-Key code snippet from src/agents/tabular/qlearning.py:
+Key code snippet from `src/agents/tabular/qlearning.py`.
 
 ```bash
 class QLearningAgent(Agent):
@@ -72,7 +73,7 @@ class QLearningAgent(Agent):
 
 ### 1D Point Environment with Obstacles
 
-The PointEnv is implemented in src/envs/custom_envs/point.py and demonstrated in run/render_point_env.py.
+The PointEnv is implemented in `src/envs/custom_envs/point.py`  and demonstrated in `run/render_point_env.py`.
 
 
 1. **Run the PointEnv visualization:**
