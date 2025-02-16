@@ -1,16 +1,14 @@
-import gymnasium as gym
 
 from src.agents import QLearningAgent
+from src.envs import Simple1DPathEnv
 
-# Example usage
-env = gym.make('CliffWalking-v0')
-print(env)
-agent = QLearningAgent(env)
+# Initialize environment and agent
+env = Simple1DPathEnv(x_end=20)
+agent = QLearningAgent(env, episodes=100_000)
 
 # Train the agent
 agent.train()
 
 # Evaluate the agent
-env = gym.make('CliffWalking-v0', render_mode='human')
-agent.env = env
+agent.env = Simple1DPathEnv(x_end=20, render_mode="human") 
 print(agent.evaluate(10))
