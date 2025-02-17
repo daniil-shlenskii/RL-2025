@@ -12,6 +12,6 @@ Code of the Agent is in the [src/agents/tabular/qlearning.py](src/agents/tabular
 
 Train and evaluation is run with the following code:
 
-```python
+```shell
 python run/1_tabular.py
 ```
