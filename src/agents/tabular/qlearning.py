@@ -14,7 +14,6 @@ class QLearningAgent(Agent):
         learning_rate: float = 0.1,
         epsilon: float = 0.1,
         #
-        episodes: int = 1000,
         seed: int = 42
     ):
         self.env = env
@@ -22,7 +21,6 @@ class QLearningAgent(Agent):
         self.discount_factor = discount_factor  # Gamma
         self.epsilon = epsilon  # Exploration factor
         self.seed = seed  # Random seed for reproducibility
-        self.episodes = episodes  # Number of episodes for training
 
         # Initialize Q-table with zeros
         self.Q = np.zeros((env.observation_space.n, env.action_space.n))
@@ -43,30 +41,23 @@ class QLearningAgent(Agent):
         actions = [np.argmax(self.Q[state, :]) for state in states]
         return np.array(actions)
 
-    def train(self):
-        """ Train the agent using Q-learning. """
-        for episode in range(self.episodes):
-            state, _ = self.env.reset(seed=self.seed + episode)
-            done, truncated = False, False
-            total_reward = 0
-            while not (done or truncated):
-                # Choose action using epsilon-greedy policy
-                action = self.sample_actions([state])[0]
+    def train_step(self, episode: int):
+        state, _ = self.env.reset(seed=self.seed + episode)
+        done, truncated = False, False
+        total_reward = 0
+        while not (done or truncated):
+            action = self.sample_actions([state])[0]
+            next_state, reward, done, truncated, _ = self.env.step(action)
+            self.Q[state, action] += self.learning_rate * (
+                reward + self.discount_factor * np.max(self.Q[next_state, :]) - self.Q[state, action]
+            )
+            state = next_state
+            total_reward += reward 
+        return total_reward
 
-                # Take action and observe reward and next state
-                next_state, reward, done, truncated, _ = self.env.step(action)
+    def save(self, save_path: str):
+        with open(save_path, "wb") as file:
+            np.save(file, self.Q)
 
-                # Update Q-value using the Q-learning formula
-                self.Q[state, action] += self.learning_rate * (
-                    reward + self.discount_factor * np.max(self.Q[next_state, :]) - self.Q[state, action]
-                )
-
-                # Transition to the next state
-                state = next_state
-
-                # Update total reward
-                total_reward += reward 
-
-            # Print episode summary
-            if episode % 100 == 0:
-                print(f"Episode {episode} | Total reward: {total_reward:.2f}")
+    def load(self, save_path: str):
+        self.Q = np.load(save_path)
