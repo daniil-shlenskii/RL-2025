@@ -1,7 +1,9 @@
+from gymnasium.envs.registration import register
+
 from .cardenv_1d import CardEnv
 from .obstacles import Simple1DPathEnv
 from .point import PointEnv
-from gymnasium.envs.registration import register
+from .trex_env_simplified import TRexEnvSimplified
 
 register(
     id="TRex-v0",
