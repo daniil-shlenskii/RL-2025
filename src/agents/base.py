@@ -1,6 +1,8 @@
+import os
 from abc import ABC, abstractmethod
 
 import gymnasium as gym
+import matplotlib.pyplot as plt
 import numpy as np
 
 
@@ -23,12 +25,14 @@ class Agent(ABC):
         save_every: int=None,
         save_path: str=None,
     ):
+        self.total_reward_history = []
         for episode in range(num_episodes):
             total_reward = self.train_step(episode)
             if episode == 0 or (episode + 1) % log_every == 0:
                 print(f"Episode {episode} | Total reward: {total_reward:.2f}")
             if save_every and (episode + 1) % save_every == 0:
                 self.save(save_path)
+            self.total_reward_history.append(total_reward)
 
     @abstractmethod
     def train_step(self, episode: int):
@@ -36,7 +40,14 @@ class Agent(ABC):
 
     @abstractmethod
     def save(self, save_path: str):
-        pass
+        if not os.path.exists(save_path):
+            os.mkdir(save_path)
+        plt.plot(self.total_reward_history, color="blue")
+        plt.xlabel("Episode")
+        plt.ylabel("Total reward")
+        plt.savefig(f"{save_path}/rewards.png")
+        plt.close()
+
 
     def evaluate(self, num_episodes: int) -> dict[str, float]:
         env = gym.wrappers.RecordEpisodeStatistics(self.env, buffer_length=num_episodes)
