@@ -4,7 +4,7 @@ from src.agents import QLearningAgent
 from src.utils import init_run
 
 # run init
-SAVE_PATH = "artifacts/1_tabular.ckpt"
+SAVE_PATH = "artifacts/1_tabular"
 args = init_run()
 
 # env init

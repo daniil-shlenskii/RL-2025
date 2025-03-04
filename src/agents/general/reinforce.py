@@ -59,7 +59,8 @@ class ReinforceAgent(Agent):
         return np.sum(rewards)
 
     def save(self, save_path: str):
-        torch.save(self.policy_net.state_dict(), save_path)
+        super().save(save_path)
+        torch.save(self.policy_net.state_dict(), f"{save_path}/checkpoint.pt")
 
     def load(self, save_path: str):
-        self.policy_net.load_state_dict(torch.load(save_path))
+        self.policy_net.load_state_dict(torch.load(f"{save_path}/checkpoint.pt"))
