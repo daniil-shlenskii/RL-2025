@@ -56,8 +56,9 @@ class QLearningAgent(Agent):
         return total_reward
 
     def save(self, save_path: str):
-        with open(save_path, "wb") as file:
+        super().save(save_path)
+        with open(f"{save_path}/Q.npy", "wb") as file:
             np.save(file, self.Q)
 
     def load(self, save_path: str):
-        self.Q = np.load(save_path)
+        self.Q = np.load(f"{save_path}/Q.npy")

@@ -5,11 +5,12 @@ from src.utils import init_run
 
 # run init
 SAVE_PATH = "artifacts/1_tabular"
+env_name = "CliffWalking-v0"
 args = init_run()
 
 # env init
-env = gym.make("CliffWalking-v0")
-eval_env = gym.make("CliffWalking-v0", render_mode="human")
+env = gym.make(env_name)
+eval_env = gym.make(env_name, render_mode="human")
 
 # agent init
 agent = QLearningAgent(env)
@@ -26,5 +27,5 @@ if not args.eval: # train
 # evaluate
 agent.load(SAVE_PATH)
 agent.env = eval_env
-score = agent.evaluate(1)
+score = agent.evaluate(3)
 print(f"eval score: {score}")

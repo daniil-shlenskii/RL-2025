@@ -38,7 +38,6 @@ class Agent(ABC):
     def train_step(self, episode: int):
         pass
 
-    @abstractmethod
     def save(self, save_path: str):
         if not os.path.exists(save_path):
             os.mkdir(save_path)
