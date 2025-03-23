@@ -194,7 +194,8 @@ class TRexEnv(gym.Env):
         if action == 2 and not self.is_jump_squat:
             self.is_jump_squat = 2
             self.player_squat_time = 10
-            self.player_width /= 2
+            self.player_height /= 2
+            self.player_y = self.ground_height - self.player_height
             
         # Update player position
         if self.is_jump_squat == 1:
@@ -212,7 +213,8 @@ class TRexEnv(gym.Env):
             
             if self.player_squat_time == 0:
                 self.is_jump_squat = 0
-                self.player_width *= 2
+                self.player_height *= 2
+                self.player_y = self.ground_height - self.player_height
         # Update obstacles
         reward = 1 - (action > 0) * 2
 
@@ -269,7 +271,7 @@ class TRexEnv(gym.Env):
                 else:
                     obstacle_rect = pygame.Rect(
                             obstacle["x"], 
-                            self.ground_height - self.obstacle_height_squat + self.obstacle_squat_ground, 
+                            self.ground_height - self.obstacle_height_squat - self.obstacle_squat_ground, 
                             self.obstacle_width_squat,
                             self.obstacle_height_squat
                     )
@@ -327,7 +329,7 @@ class TRexEnv(gym.Env):
                         canvas, (200, 50, 50),
                         (
                             obstacle["x"], 
-                            self.ground_height - self.obstacle_height_squat + self.obstacle_squat_ground, 
+                            self.ground_height - self.obstacle_height_squat - self.obstacle_squat_ground, 
                             self.obstacle_width_squat,
                             self.obstacle_height_squat
                         )
