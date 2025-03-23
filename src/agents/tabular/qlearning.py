@@ -9,7 +9,7 @@ class QLearningAgent(Agent):
         self,
         #
         env: gym.Env,
-        discount_factor: float = 0.99,
+        gamma: float = 0.99,
         #
         learning_rate: float = 0.1,
         epsilon: float = 0.1,
@@ -18,7 +18,7 @@ class QLearningAgent(Agent):
     ):
         self.env = env
         self.learning_rate = learning_rate  # Alpha
-        self.discount_factor = discount_factor  # Gamma
+        self.gamma = gamma  # Gamma
         self.epsilon = epsilon  # Exploration factor
         self.seed = seed  # Random seed for reproducibility
 
@@ -49,7 +49,7 @@ class QLearningAgent(Agent):
             action = self.sample_actions([state])[0]
             next_state, reward, done, truncated, _ = self.env.step(action)
             self.Q[state, action] += self.learning_rate * (
-                reward + self.discount_factor * np.max(self.Q[next_state, :]) - self.Q[state, action]
+                reward + self.gamma * np.max(self.Q[next_state, :]) - self.Q[state, action]
             )
             state = next_state
             total_reward += reward 

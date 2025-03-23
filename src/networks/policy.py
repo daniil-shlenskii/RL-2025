@@ -15,16 +15,14 @@ class DiscretePolicy(nn.Module):
         log_probs = self.net(state)
         return log_probs
 
-    def sample_actions(self, state: torch.Tensor) -> torch.Tensor:
+    def get_distribution(self, state: torch.Tensor):
         log_probs = self.forward(state)
         probs = F.softmax(log_probs, dim=-1)
-
         distr = torch.distributions.Categorical(probs=probs)
-        actions = distr.sample()
-        log_probs = distr.log_prob(actions)
-        return actions, log_probs 
+        return distr
 
-    def eval_actions(self, state: torch.Tensor) -> torch.Tensor:
+    @torch.no_grad()
+    def mode(self, state: torch.Tensor) -> torch.Tensor:
         log_probs = self.forward(state)
         actions = torch.argmax(log_probs, dim=-1)
         return actions

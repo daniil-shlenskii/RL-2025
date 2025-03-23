@@ -11,30 +11,32 @@ class ReinforceAgent(Agent):
         self,
         env: gym.Env,
         policy_net: nn.Module,
-        discount_factor: float = 0.99,
+        gamma: float = 0.99,
         episodes: int = 1000,
         seed: int = 42,
     ):
         self.env = env
-        self.discount_factor = discount_factor
+        self.gamma = gamma
         self.seed = seed
         self.episodes = episodes
 
         self.policy_net = policy_net
 
     def sample_actions(self, states: torch.Tensor) -> torch.Tensor:
-        actions, log_probs =  self.policy_net.sample_actions(states)
+        distr =  self.policy_net.get_distribution(states)
+        actions = distr.sample()
+        log_probs = distr.log_prob(actions)
         return actions, log_probs
 
     def eval_actions(self, states: np.ndarray) -> np.ndarray:
         states = torch.tensor(states)
-        actions =  self.policy_net.eval_actions(states).detach().numpy()
-        return actions
+        actions =  self.policy_net.mode(states)
+        return actions.detach().numpy()
 
     def update_policy_net(self, rewards: list, log_probs: list):
         discounted_rewards = [rewards[-1]]
         for reward in reversed(rewards[:-1]):
-            discounted_rewards.append(reward + self.discount_factor * discounted_rewards[-1])
+            discounted_rewards.append(reward + self.gamma * discounted_rewards[-1])
         discounted_rewards = torch.tensor(list(reversed(discounted_rewards)))
 
         log_probs = torch.stack(log_probs)
