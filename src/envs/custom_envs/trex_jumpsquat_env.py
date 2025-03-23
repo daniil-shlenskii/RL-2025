@@ -214,7 +214,7 @@ class TRexEnv(gym.Env):
             if self.player_squat_time == 0:
                 self.is_jump_squat = 0
                 self.player_height *= 2
-                self.player_y = self.ground_height - self.player_height
+                self.player_y = self.ground_height + self.player_height
         # Update obstacles
         reward = 1 - (action > 0) * 2
 
