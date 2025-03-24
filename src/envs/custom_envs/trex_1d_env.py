@@ -6,9 +6,9 @@ import pygame
 from gymnasium import spaces
 
 
-class Simple1DPathEnv(gym.Env):
+class TRex1dEnv(gym.Env):
     def __init__(self, x_start=0, x_end=10, obstacles=None, screen_width=600, screen_height=200, render_mode=None):
-        super(Simple1DPathEnv, self).__init__()
+        super().__init__()
 
         # Initialize starting and ending positions
         self.x_start = x_start
