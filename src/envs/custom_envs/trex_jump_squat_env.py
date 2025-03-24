@@ -7,9 +7,28 @@ from gymnasium import spaces
 
 
 class TRexJumpSquatEnv(gym.Env):
+    
+        """
+    T-Rex Runner environment for reinforcement learning.
+    The agent controls a character that must jump or squat over obstacles.
+    
+    Actions:
+        0: No jump
+        1: Jump
+        2: Squat
+        
+    Observation:
+        [0]: Player y position (normalized)
+        [1]: Is jumping/squating flag (0, 1 for jump, 2 for squat)
+        [2]: Next obstacle distance (normalized)
+        [3]: Next obstacle type (0 or 1) (Which can be overcome by jumping/squatting)
+        [4]: Second obstacle distance (normalized)
+        [5] Second obstacle type (same logic as [3])
+    """
     metadata = {"render_modes": ["human", "rgb_array"], "render_fps": 30}
 
     def __init__(self, render_mode=None, num_obstacles=10):
+        # Screen dimensions
         self.width = 800  # Screen width
         self.height = 400  # Screen height
         self.ground_height = 300  # Height of the ground from top
@@ -27,9 +46,10 @@ class TRexJumpSquatEnv(gym.Env):
         self.num_obstacles = num_obstacles
         self.obstacle_width_jump = 30
         self.obstacle_height_jump = 50
+        
         self.obstacle_width_squat = 30
         self.obstacle_height_squat = 120
-        self.obstacle_squat_ground = 40
+        self.obstacle_squat_ground = 40 #Gap beetween obstacle and ground.
         
         # Obstacle spacing - carefully calculated based on jump physics
         self.min_gap = 350  # Minimum gap between obstacles
@@ -44,14 +64,6 @@ class TRexJumpSquatEnv(gym.Env):
         # Action space: 0=no jump|squat, 1=jump, 2 = squat
         self.action_space = spaces.Discrete(3)
         
-        # Observation space: [
-        #   player_y_normalized,
-        #   is_jumping (0, 1 or 2),
-        #   next_obstacle_distance_normalized,
-        #   next_obstacle_type (0, 1),
-        #   second_obstacle_distance_normalized,
-        #   second_obstacle_type (0, 1)
-        # ]
         self.observation_space = spaces.Box(
             low=np.array([0, 0, 0, 0, 0, 0], dtype=np.float32),
             high=np.array([1, 2, 1, 1, 1, 1], dtype=np.float32),
@@ -73,6 +85,7 @@ class TRexJumpSquatEnv(gym.Env):
         # Reset player
         self.player_height = 60
         self.player_y = self.ground_height - self.player_height
+        
         self.player_vel_y = 0
         self.player_squat_time = 0
         self.is_jump_squat = 0
@@ -91,16 +104,7 @@ class TRexJumpSquatEnv(gym.Env):
             self._render_frame()
             
         return self._get_obs(), {}
-    
-    def calculate_min_gap_for_height(self):
-        """Calculate minimum safe gap based on physics and jump heights"""
-        # For higher obstacles, we need more reaction distance
-        # Time to complete a jump = 2 * sqrt(2 * height / gravity)
-        # Distance covered = speed * time
-        jump_time = 2 * math.sqrt(2 * self.jump_height / self.gravity)
-        min_distance = self.speed * jump_time * 1.2  # 20% safety margin
-        
-        return max(self.min_gap, int(min_distance))
+
     
     def generate_obstacles(self):
         # Start with the first obstacle just outside the screen
@@ -110,28 +114,16 @@ class TRexJumpSquatEnv(gym.Env):
         obstacle_types = []
         
         for i in range(self.num_obstacles):
-            # Choose a height that creates an interesting pattern
+            # Choose an obstacle type that creates an interesting pattern
             if len(obstacle_types) >= 2 and obstacle_types[-1] == obstacle_types[-2]:
                 obs_type = 1 - obstacle_types[-1]
             else:
-                # Weighted random selection - make higher obstacles slightly less common
-                #weights = [0.4, 0.35, 0.25]  # 40% low, 35% medium, 25% high
                 obs_type = self.np_random.choice(2)
             
             obstacle_types.append(obs_type)
-            
-            # Calculate minimum gap based on the previous obstacle's height
-            # For the first obstacle or after low obstacles, the standard min_gap works
-            # For higher obstacles, we need more space for the player to react and jump
-            if i > 0:
-                min_gap = 150
-                #prev_height_idx = recent_heights[-2]
-                #min_gap = self.calculate_min_gap_for_height(prev_height_idx)
-            else:
-                min_gap = self.min_gap
                 
             # Vary the gap based on a uniform distribution
-            gap = self.np_random.integers(min_gap, self.max_gap)
+            gap = self.np_random.integers(self.min_gap, self.max_gap)
             
             # Adjust for difficulty progression - increase min and max gaps slightly as game progresses
             difficulty_factor = min(1.0 + (i * 0.05), 1.3)  # Up to 30% increase
@@ -161,7 +153,7 @@ class TRexJumpSquatEnv(gym.Env):
         while len(next_obstacles) < 2:
             next_obstacles.append({
                 "x": self.width*2,  # Far away
-                "type": 0,    # Low height (doesn't matter since it's far)
+                "type": 0,    #(type doesn't matter since it's far)
                 "passed": False
             })
         
@@ -180,24 +172,34 @@ class TRexJumpSquatEnv(gym.Env):
         return np.array(obs, dtype=np.float32)
     
     def step(self, action):
+         """
+        Execute one step in the environment.
+        
+        Args:
+            action (int): 0 = no jump/squat, 1 = jump, 2 = squat
+            
+        Returns:
+            observation, reward, done, truncated, info
+        """
+        
         # Move obstacles and update game state
         self.distance_traveled += self.speed
         
         # Process action (jump)
-        # Action 0 is "no jump", actions 1 is jump, action 2 is squat
         if action == 1 and not self.is_jump_squat:  # Can only jump if not already jumping
             self.is_jump_squat = 1
             target_height = self.jump_height
             # Calculate velocity needed to reach the target height
             self.player_vel_y = -np.sqrt(2 * self.gravity * target_height)
             
+         # Process action (squat)
         if action == 2 and not self.is_jump_squat:
             self.is_jump_squat = 2
             self.player_squat_time = self.squat_time
             self.player_height /= 2
             self.player_y = self.ground_height - self.player_height
             
-        # Update player position
+        # Update player position (jump)
         if self.is_jump_squat == 1:
             self.player_y += self.player_vel_y
             self.player_vel_y += self.gravity
@@ -208,6 +210,7 @@ class TRexJumpSquatEnv(gym.Env):
                 self.player_vel_y = 0
                 self.is_jump_squat = 0
                 
+        # Update player position (squat)
         if self.is_jump_squat == 2:
             self.player_squat_time -=1
             
@@ -215,6 +218,7 @@ class TRexJumpSquatEnv(gym.Env):
                 self.is_jump_squat = 0
                 self.player_height *= 2
                 self.player_y = self.ground_height - self.player_height
+                
         # Update obstacles
         reward = 1 - (action > 0) * 2
 
@@ -241,10 +245,6 @@ class TRexJumpSquatEnv(gym.Env):
             reward += 100  # Very big reward for reaching the goal
         
         
-        # Truncate if all obstacles are passed or after too many steps
-        # if all(obs["passed"] for obs in self.obstacles) or self.distance_traveled > 10000:
-        #     self.truncated = True
-        
         # Render if needed
         if self.render_mode == "human":
             self._render_frame()
@@ -252,6 +252,7 @@ class TRexJumpSquatEnv(gym.Env):
         return self._get_obs(), reward, self.done, self.truncated, {"score": self.score}
     
     def _check_collision(self):
+        """Check if the player collides with any obstacle"""
         player_rect = pygame.Rect(
             self.player_x, self.player_y, 
             self.player_width, self.player_height
