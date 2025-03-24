@@ -4,7 +4,7 @@ from src.agents import QLearningAgent
 from src.utils import init_run
 
 # run init
-SAVE_PATH = "artifacts/1_tabular"
+SAVE_PATH = "artifacts/1_qlearning"
 env_name = "TRex1dEnv-v0"
 args = init_run()
 
