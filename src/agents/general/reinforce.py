@@ -65,4 +65,4 @@ class ReinforceAgent(Agent):
         torch.save(self.policy_net.state_dict(), f"{save_path}/checkpoint.pt")
 
     def load(self, save_path: str):
-        self.policy_net.load_state_dict(torch.load(f"{save_path}/checkpoint.pt"))
+        self.policy_net.load_state_dict(torch.load(f"{save_path}/checkpoint.pt", weights_only=True))

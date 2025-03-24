@@ -6,7 +6,7 @@ from src.utils import init_run
 
 # run init
 SAVE_PATH = "artifacts/2_reinforce"
-env_name ="TRexSimplified-v0"
+env_name ="TRexJump-v0"
 args = init_run()
 
 # env init
@@ -22,7 +22,7 @@ agent = ReinforceAgent(env, policy_net)
 if not args.eval: # train
     save_every = 500 if args.save_ckpt else None
     agent.train(
-        num_episodes=10_000,
+        num_episodes=3_000,
         log_every=100,
         save_every=save_every,
         save_path=SAVE_PATH,

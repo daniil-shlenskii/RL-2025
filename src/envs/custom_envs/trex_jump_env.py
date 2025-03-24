@@ -6,7 +6,7 @@ import pygame
 from gymnasium import spaces
 
 
-class TRexJump(gym.Env):
+class TRexJumpEnv(gym.Env):
     """
     T-Rex Runner environment for reinforcement learning.
     The agent controls a character that must jump over obstacles.

@@ -7,7 +7,7 @@ from src.utils import init_run
 
 # run init
 SAVE_PATH = "artifacts/3_ppo"
-env_name ="TRex-v0"
+env_name ="TRexJumpSquatEnv-v0"
 args = init_run()
 
 # env init
@@ -29,7 +29,7 @@ if not args.eval: # train
     save_every = 100 if args.save_ckpt else None
     agent.train(
         num_episodes=5_000,
-        log_every=20,
+        log_every=100,
         save_every=save_every,
         save_path=SAVE_PATH,
     )

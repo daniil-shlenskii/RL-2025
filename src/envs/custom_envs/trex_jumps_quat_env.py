@@ -1,6 +1,4 @@
 import math
-import sys
-import time
 
 import gymnasium as gym
 import numpy as np
@@ -8,7 +6,7 @@ import pygame
 from gymnasium import spaces
 
 
-class TRexEnv(gym.Env):
+class TRexJumpSquatEnv(gym.Env):
     metadata = {"render_modes": ["human", "rgb_array"], "render_fps": 30}
 
     def __init__(self, render_mode=None, num_obstacles=10):

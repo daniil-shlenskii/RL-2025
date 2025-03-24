@@ -1,12 +1,11 @@
 from gymnasium.envs.registration import register
 
 register(
-    id="TRexJump-v0",
-    entry_point="src.envs.custom_envs.trex_jump_env:TRexJump",
+    id="TRexJumpEnv-v0",
+    entry_point="src.envs.custom_envs.trex_jump_env:TRexJumpEnv",
 )
 
 register(
-    id="TRex-v0",
-    entry_point="src.envs.custom_envs.trex_jumpsquat_env:TRexEnv",
-    max_episode_steps=1000,
+    id="TRexJumpSquatEnv-v0",
+    entry_point="src.envs.custom_envs.trex_jumps_quat_env:TRexJumpSquatEnv",
 )
