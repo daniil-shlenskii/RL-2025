@@ -72,6 +72,7 @@ class TRexEnv(gym.Env):
         super().reset(seed=seed)
         
         # Reset player
+        self.player_height = 60
         self.player_y = self.ground_height - self.player_height
         self.player_vel_y = 0
         self.player_squat_time = 0
