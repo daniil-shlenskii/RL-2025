@@ -30,3 +30,19 @@ Train and evaluation is run with the following code:
 ```shell
 python -m run.2_reinforce
 ```
+
+## \#3: PPO
+
+Description of the MDP and the Agent is in the `TODO`
+<!--[slides/2\_reinforce_slides.pdf](slides/2_reinforce_slides.pdf).-->
+
+Code of the MDP is in the [src/envs/custom_envs/trex\_jump\_squat\_env.py](src/envs/custom_envs/trex_jump_squat_env.py).
+
+
+Code of the Agent is in the [src/agents/general/ ppo.py](src/agents/general/ppo.py).
+ 
+Train and evaluation is run with the following code:
+
+```shell
+python -m run.3_ppo
+```
