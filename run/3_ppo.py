@@ -1,6 +1,7 @@
 import gymnasium as gym
 
-from src.agents import ReinforceAgent
+from src.agents import PPOAgent
+from src.networks.critic import StateCritic
 from src.networks.policy import DiscretePolicy
 from src.utils import init_run
 
@@ -17,13 +18,18 @@ eval_env = gym.make(env_name, render_mode="human")
 obs_dim = env.observation_space.shape[0]
 action_dim = env.action_space.n
 policy_net = DiscretePolicy(obs_dim, action_dim, hidden_dims=[128, 128])
-agent = ReinforceAgent(env, policy_net)
+value_net = StateCritic(obs_dim, hidden_dims=[128, 128])
+agent = PPOAgent(
+    env,
+    policy_net=policy_net,
+    value_net=value_net,
+)
 
 if not args.eval: # train
-    save_every = 500 if args.save_ckpt else None
+    save_every = 100 if args.save_ckpt else None
     agent.train(
-        num_episodes=10_000,
-        log_every=100,
+        num_episodes=5_000,
+        log_every=20,
         save_every=save_every,
         save_path=SAVE_PATH,
     )

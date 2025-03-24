@@ -16,7 +16,7 @@ class PPOAgent(Agent):
         gae_lambda: float = 0.95, # from original paper
         clip_epsilon: float = 0.2, # from original paper
         #
-        update_epochs: int = 3,
+        update_epochs: int = 5,
         n_train_trajectories: int = 3,
         batch_size: int = 128,
         #
@@ -45,6 +45,7 @@ class PPOAgent(Agent):
         log_probs = distr.log_prob(actions)
         return actions, log_probs
 
+    @torch.no_grad()
     def eval_actions(self, states: np.ndarray) -> np.ndarray:
         states = torch.tensor(states)
         actions =  self.policy_net.mode(states)
@@ -155,5 +156,5 @@ class PPOAgent(Agent):
         torch.save(self.value_net.state_dict(), f"{save_path}/value_net.pt")
 
     def load(self, save_path: str):
-        self.policy_net.load_state_dict(torch.load(f"{save_path}/policy_net.pt"))
-        self.value_net.load_state_dict(torch.load(f"{save_path}/value_net.pt"))
+        self.policy_net.load_state_dict(torch.load(f"{save_path}/policy_net.pt", weights_only=True))
+        self.value_net.load_state_dict(torch.load(f"{save_path}/value_net.pt", weights_only=True))
