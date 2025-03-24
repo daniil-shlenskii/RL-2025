@@ -32,7 +32,7 @@ class TRexJumpSquatEnv(gym.Env):
         self.obstacle_squat_ground = 40
         
         # Obstacle spacing - carefully calculated based on jump physics
-        self.min_gap = 250  # Minimum gap between obstacles
+        self.min_gap = 350  # Minimum gap between obstacles
         self.max_gap = 450  # Maximum gap between obstacles
         
         # Game speed (pixels per frame)
