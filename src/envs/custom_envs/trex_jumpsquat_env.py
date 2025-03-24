@@ -18,7 +18,7 @@ class TRexEnv(gym.Env):
         
         # Jump heights (from ground)
         self.jump_height = 100
-        self.squat_time = 10
+        self.squat_time = 20
         # Player properties
         self.player_width = 40
         self.player_height = 60
@@ -192,8 +192,8 @@ class TRexEnv(gym.Env):
             self.player_vel_y = -np.sqrt(2 * self.gravity * target_height)
             
         if action == 2 and not self.is_jump_squat:
-            self.is_jump_squat = 0
-            self.player_squat_time = 10
+            self.is_jump_squat = 2
+            self.player_squat_time = 20
             self.player_height /= 2
             self.player_y = self.ground_height - self.player_height
             
@@ -206,7 +206,7 @@ class TRexEnv(gym.Env):
             if self.player_y >= self.ground_height - self.player_height:
                 self.player_y = self.ground_height - self.player_height
                 self.player_vel_y = 0
-                self.is_jump_squat = 1
+                self.is_jump_squat = 0
                 
         if self.is_jump_squat == 2:
             self.player_squat_time -=1
