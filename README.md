@@ -33,8 +33,8 @@ python -m run.2_reinforce
 
 ## \#3: PPO
 
-Description of the MDP and the Agent is in the `TODO`
-<!--[slides/2\_reinforce_slides.pdf](slides/2_reinforce_slides.pdf).-->
+Description of the MDP and the Agent is in the 
+[slides/3\_ppo_slides.pdf](slides/3_ppo_slides.pdf).
 
 Code of the MDP is in the [src/envs/custom_envs/trex\_jump\_squat\_env.py](src/envs/custom_envs/trex_jump_squat_env.py).
 
