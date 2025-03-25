@@ -6,7 +6,7 @@ from src.utils import init_run
 
 # run init
 SAVE_PATH = "artifacts/2_reinforce"
-env_name ="TRexJump-v0"
+env_name = "TRexJumpEnv-v0"
 args = init_run()
 
 # env init

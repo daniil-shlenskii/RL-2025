@@ -12,5 +12,5 @@ register(
 
 register(
     id="TRexJumpSquatEnv-v0",
-    entry_point="src.envs.custom_envs.trex_jumps_quat_env:TRexJumpSquatEnv",
+    entry_point="src.envs.custom_envs.trex_jump_squat_env:TRexJumpSquatEnv",
 )

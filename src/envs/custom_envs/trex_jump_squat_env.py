@@ -1,5 +1,3 @@
-import math
-
 import gymnasium as gym
 import numpy as np
 import pygame
@@ -7,8 +5,7 @@ from gymnasium import spaces
 
 
 class TRexJumpSquatEnv(gym.Env):
-    
-        """
+    """
     T-Rex Runner environment for reinforcement learning.
     The agent controls a character that must jump or squat over obstacles.
     
@@ -172,7 +169,7 @@ class TRexJumpSquatEnv(gym.Env):
         return np.array(obs, dtype=np.float32)
     
     def step(self, action):
-         """
+        """
         Execute one step in the environment.
         
         Args:
@@ -336,8 +333,8 @@ class TRexJumpSquatEnv(gym.Env):
                         )
                     )
                     
-                
-        
+
+
         # Draw goal
         if 0 <= self.goal_x <= self.width:
             pygame.draw.rect(
@@ -351,11 +348,6 @@ class TRexJumpSquatEnv(gym.Env):
             text = font.render(f"Score: {self.score}", True, (0, 0, 0))
             canvas.blit(text, (10, 10))
             
-            # Draw controls guide
-            controls_font = pygame.font.Font(None, 24)
-            controls_text = controls_font.render("A: Jump", True, (0, 0, 0))
-            canvas.blit(controls_text, (10, 50))
-        
         if self.render_mode == "human":
             self.window.blit(canvas, canvas.get_rect())
             pygame.event.pump()

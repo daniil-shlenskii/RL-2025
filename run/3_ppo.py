@@ -7,7 +7,7 @@ from src.utils import init_run
 
 # run init
 SAVE_PATH = "artifacts/3_ppo"
-env_name ="TRexJumpSquatEnv-v0"
+env_name = "TRexJumpSquatEnv-v0"
 args = init_run()
 
 # env init
